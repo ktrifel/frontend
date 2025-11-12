@@ -1,32 +1,34 @@
-﻿# === Build-Stage: Angular-Projekt im Container erzeugen & bauen ===
+﻿# === Build-Stage: Angular aus lokalem Workspace bauen ===
 FROM node:22-alpine AS build
 WORKDIR /app
 
-# Angular CLI installieren
-RUN npm install -g @angular/cli@17
+# 1) Dependencies installieren (Cache-freundlich)
+COPY package*.json ./
+RUN npm install -g @angular/cli@17 && npm ci
 
-# Neues Angular-Projekt "frontendapp" im Container erzeugen
-# --skip-git: kein Git im Container
-# --routing: Router aktiv
-# --style=scss: SCSS-Styles
-# --package-manager=npm: Standard npm
-RUN ng new frontendapp --skip-git --routing --style=scss --package-manager=npm
+# 2) Projekt kopieren und Production-Build erstellen
+COPY . .
+RUN ng build --configuration production
 
-# Ab hier im generierten Projekt arbeiten
-WORKDIR /app/frontendapp
-
-# Dependencies installieren und Production-Build erstellen
-RUN npm install
-RUN ng build --configuration production --output-path=dist/app
+# 3) Build-Ergebnis auf EINEN Ordner normalisieren (dist/app ODER dist/<proj>/browser)
+RUN set -eux; \
+    mkdir -p /normalized; \
+    if [ -d "dist/app" ]; then \
+        cp -r dist/app/* /normalized/; \
+    elif [ -d "$(find dist -type d -name browser -maxdepth 2 | head -n1)" ]; then \
+        cp -r $(find dist -type d -name browser -maxdepth 2 | head -n1)/* /normalized/; \
+    else \
+        cp -r dist/*/* /normalized/ 2>/dev/null || cp -r dist/* /normalized/ || true; \
+    fi
 
 # === Runtime-Stage: NGINX als Webserver ===
 FROM nginx:alpine
 
-# SPA-Routing für Angular (falls Datei existiert, sonst Standard-Nginx verwenden)
+# SPA-Routing (Deep Links)
 COPY nginx.conf /etc/nginx/conf.d/default.conf
 
-# Gebaute App deployen
-COPY --from=build /app/frontendapp/dist/app /usr/share/nginx/html
+# Gebaute App deployen (immer aus /normalized)
+COPY --from=build /normalized /usr/share/nginx/html
 
 EXPOSE 80
 CMD ["nginx", "-g", "daemon off;"]
