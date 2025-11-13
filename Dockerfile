@@ -1,34 +1,38 @@
-﻿# === Build-Stage: Angular aus lokalem Workspace bauen ===
+﻿# === Build-Stage: Angular bauen ===
 FROM node:22-alpine AS build
 WORKDIR /app
 
-# 1) Dependencies installieren (Cache-freundlich)
+# Dependencies
 COPY package*.json ./
 RUN npm install -g @angular/cli@17 && npm ci
 
-# 2) Projekt kopieren und Production-Build erstellen
+# Quellcode kopieren + Production-Build
 COPY . .
 RUN ng build --configuration production
 
-# 3) Build-Ergebnis auf EINEN Ordner normalisieren (dist/app ODER dist/<proj>/browser)
+# Build-Ergebnis auf /out normalisieren
+# => findet dist/<project>/browser oder dist/app
 RUN set -eux; \
-    mkdir -p /normalized; \
-    if [ -d "dist/app" ]; then \
-        cp -r dist/app/* /normalized/; \
-    elif [ -d "$(find dist -type d -name browser -maxdepth 2 | head -n1)" ]; then \
-        cp -r $(find dist -type d -name browser -maxdepth 2 | head -n1)/* /normalized/; \
+    publish="$(find dist -type d -name browser -maxdepth 2 | head -n1 || true)"; \
+    mkdir -p /out; \
+    if [ -n "$publish" ] && [ -d "$publish" ]; then \
+        cp -r "$publish"/* /out/; \
+    elif [ -d dist/app ]; then \
+        cp -r dist/app/* /out/; \
     else \
-        cp -r dist/*/* /normalized/ 2>/dev/null || cp -r dist/* /normalized/ || true; \
-    fi
+        # Fallback: best guess
+        cp -r dist/* /out/ 2>/dev/null || true; \
+    fi; \
+    ls -la /out
 
-# === Runtime-Stage: NGINX als Webserver ===
+# === Runtime-Stage: NGINX liefert /out aus ===
 FROM nginx:alpine
 
 # SPA-Routing (Deep Links)
 COPY nginx.conf /etc/nginx/conf.d/default.conf
 
-# Gebaute App deployen (immer aus /normalized)
-COPY --from=build /normalized /usr/share/nginx/html
+# Gebaute App deployen
+COPY --from=build /out /usr/share/nginx/html
 
 EXPOSE 80
 CMD ["nginx", "-g", "daemon off;"]
