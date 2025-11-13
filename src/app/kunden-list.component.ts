@@ -1,21 +1,35 @@
-// src/app/kunden-list.component.ts
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { KundenService, Kunde } from './kunden.service';
+import { MatTableModule } from '@angular/material/table';
+import { KundenService } from './kunden.service';
+import { Kunde } from './kunde.model';
 
 @Component({
   selector: 'app-kunden-list',
   standalone: true,
-  // für *ngFor
-  imports: [CommonModule],
-  templateUrl: './kunden-list.component.html'
+  imports: [CommonModule, MatTableModule],
+  templateUrl: './kunden-list.component.html',
+  styleUrls: ['./kunden-list.component.scss']
 })
 export class KundenListComponent implements OnInit {
-  kunden: Kunde[] = [];
+
+  displayedColumns: string[] = [
+    'kundenId',
+    'vorname',
+    'nachname',
+    'email',
+    'telefonnummer',
+    'stadt'
+  ];
+
+  dataSource: Kunde[] = [];
 
   constructor(private readonly kundenService: KundenService) {}
 
   ngOnInit(): void {
-    this.kundenService.list().subscribe(data => this.kunden = data);
+    this.kundenService.getKunden().subscribe({
+      next: (kunden) => (this.dataSource = kunden),
+      error: (err) => console.error('Fehler beim Laden der Kunden', err)
+    });
   }
 }

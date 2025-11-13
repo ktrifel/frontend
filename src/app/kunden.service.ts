@@ -1,51 +1,34 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
-import { environment } from '../environments/environment';
+import { Kunde } from './kunde.model';
 
-export interface Adresse {
-  adresseId?: number;
-  strasse: string;
-  hausnummer: string;
-  plz: string;
-  stadt: string;
-  land: string;
-}
-
-export interface Kunde {
-  kundenId?: number;
-  vorname: string;
-  nachname: string;
-  firma?: string;
-  geburtsdatum?: string;
-  email?: string;
-  telefonnummer?: string;
-  adresse: Adresse;
-}
-
-@Injectable({ providedIn: 'root' })
+@Injectable({
+  providedIn: 'root'
+})
 export class KundenService {
-  private baseUrl = environment.apiUrl;
 
-  constructor(private http: HttpClient) {}
+  private readonly baseUrl = 'http://localhost:8090/api/kunden';
 
-  list(): Observable<Kunde[]> {
+  constructor(private readonly http: HttpClient) {}
+
+  getKunden(): Observable<Kunde[]> {
     return this.http.get<Kunde[]>(this.baseUrl);
   }
 
-  get(id: number): Observable<Kunde> {
+  getKunde(id: number): Observable<Kunde> {
     return this.http.get<Kunde>(`${this.baseUrl}/${id}`);
   }
 
-  create(kunde: Kunde): Observable<Kunde> {
+  createKunde(kunde: Kunde): Observable<Kunde> {
     return this.http.post<Kunde>(this.baseUrl, kunde);
   }
 
-  update(id: number, kunde: Kunde): Observable<Kunde> {
+  updateKunde(id: number, kunde: Kunde): Observable<Kunde> {
     return this.http.put<Kunde>(`${this.baseUrl}/${id}`, kunde);
   }
 
-  delete(id: number): Observable<void> {
+  deleteKunde(id: number): Observable<void> {
     return this.http.delete<void>(`${this.baseUrl}/${id}`);
   }
 }

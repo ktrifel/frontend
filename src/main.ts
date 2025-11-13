@@ -4,6 +4,6 @@ import { AppComponent } from './app/app.component';
 
 bootstrapApplication(AppComponent, {
   providers: [
-    provideHttpClient() // HttpClient für alle Services bereitstellen
+    provideHttpClient() // HttpClient global verfügbar
   ]
 });

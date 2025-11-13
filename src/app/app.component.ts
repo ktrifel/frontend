@@ -1,12 +1,16 @@
-// src/app/app.component.ts
 import { Component } from '@angular/core';
+import { RouterOutlet } from '@angular/router';
 import { KundenListComponent } from './kunden-list.component';
 
 @Component({
   selector: 'app-root',
   standalone: true,
-  // Wichtig: Array mit echten Komponenten
-  imports: [KundenListComponent],
-  template: `<app-kunden-list></app-kunden-list>`
+  imports: [RouterOutlet, KundenListComponent],
+  template: `
+    <app-kunden-list></app-kunden-list>
+  `,
+  styleUrls: ['./app.component.scss']
 })
-export class AppComponent {}
+export class AppComponent {
+  title = 'Kundenportal';
+}
