@@ -1,23 +1,21 @@
+// src/app/kunden-list.component.ts
 import { Component, OnInit } from '@angular/core';
+import { CommonModule } from '@angular/common';
 import { KundenService, Kunde } from './kunden.service';
 
 @Component({
   selector: 'app-kunden-list',
-  template: `
-    <h2>Kundenübersicht</h2>
-    <ul>
-      <li *ngFor="let k of kunden">
-        {{ k.vorname }} {{ k.nachname }} – {{ k.email }}
-      </li>
-    </ul>
-  `
+  standalone: true,
+  // für *ngFor
+  imports: [CommonModule],
+  templateUrl: './kunden-list.component.html'
 })
 export class KundenListComponent implements OnInit {
   kunden: Kunde[] = [];
 
-  constructor(private kundenService: KundenService) {}
+  constructor(private readonly kundenService: KundenService) {}
 
   ngOnInit(): void {
-    this.kundenService.list().subscribe((list) => (this.kunden = list));
+    this.kundenService.list().subscribe(data => this.kunden = data);
   }
 }
