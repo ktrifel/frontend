@@ -1,17 +1,32 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
+import { Kunde } from './kunde.model';
 
 @Injectable({
   providedIn: 'root'
 })
 export class KundenService {
-  
-  private apiUrl = 'http://localhost:8090/api/kunden';
+  // use relative path so the dev-server proxy (proxy.conf.json) can forward requests to backend
+  readonly apiUrl = '/api/kunden';
 
-  constructor(private http: HttpClient) {}
+  constructor(private readonly http: HttpClient) {}
 
-  getKunden(): Observable<any[]> {
-    return this.http.get<any[]>(this.apiUrl);
+  findAll(): Observable<Kunde[]> {
+    return this.http.get<Kunde[]>(this.apiUrl);
+  }
+
+  create(kunde: Kunde): Observable<Kunde> {
+    return this.http.post<Kunde>(this.apiUrl, kunde);
+  }
+
+  update(kundenId: number | undefined, kunde: Kunde): Observable<Kunde> {
+    if (kundenId == null) throw new Error('kundenId is required for update');
+    return this.http.put<Kunde>(`${this.apiUrl}/${kundenId}`, kunde);
+  }
+
+  delete(kundenId: number | undefined): Observable<void> {
+    if (kundenId == null) throw new Error('kundenId is required for delete');
+    return this.http.delete<void>(`${this.apiUrl}/${kundenId}`);
   }
 }

@@ -4,7 +4,8 @@
   "type": "module",
   "scripts": {
     "ng": "ng",
-    "start": "ng serve",
+  "start": "ng serve --proxy-config proxy.conf.json",
+    "test:e2e": "playwright test",
     "build": "ng build",
     "watch": "ng build --watch --configuration development",
     "test": "ng test"

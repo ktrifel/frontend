@@ -10,18 +10,54 @@ Run `ng serve` for a dev server. Navigate to `http://localhost:4200/`. The appli
 
 Run `ng generate component component-name` to generate a new component. You can also use `ng generate directive|pipe|service|class|guard|interface|enum|module`.
 
+```markdown
+# Frontend (Angular)
+
+Dieses Repository enthält das Angular-Frontend (Standalone-Components) — gebaut für Angular 21.
+
+## Schnellstart (Entwicklung)
+
+- Abhängigkeiten installieren:
+
+```powershell
+npm install
+```
+
+- Dev-Server starten:
+
+```powershell
+npm start
+# oder direkt: ng serve --open
+```
+
+Die App ist dann unter http://localhost:4200/ erreichbar.
+
 ## Build
 
-Run `ng build` to build the project. The build artifacts will be stored in the `dist/` directory.
+```powershell
+npm run build
+```
 
-## Running unit tests
+Erzeugte Artefakte landen in `dist/`.
 
-Run `ng test` to execute the unit tests via [Karma](https://karma-runner.github.io).
+## Backend-URL konfigurieren
 
-## Running end-to-end tests
+Die Frontend-API-Base-URL befindet sich in `src/app/kunden.service.ts` als `apiUrl`. Passe dort die URL an (z. B. `http://localhost:8090/api/kunden`), falls dein Backend unter einer anderen Adresse läuft.
 
-Run `ng e2e` to execute the end-to-end tests via a platform of your choice. To use this command, you need to first add a package that implements end-to-end testing capabilities.
+## VS Code Hinweise
 
-## Further help
+- Falls du nach Änderungen noch alte "Module not found"- oder LSP-Fehler siehst, starte den TypeScript-Server neu: `Ctrl+Shift+P` → "TypeScript: Restart TS Server" oder starte VS Code neu.
 
-To get more help on the Angular CLI use `ng help` or go check out the [Angular CLI Overview and Command Reference](https://angular.io/cli) page.
+## Was wurde verbessert
+
+- Projekt auf Angular 21 geprüft und Syntax-Fehler entfernt (z. B. entfernte Markdown-Fences in Quelltexten).
+- CRUD-Service (`KundenService`) mit `findAll`, `create`, `update`, `delete` implementiert.
+- Material-basierte UI: Liste, Dialoge (Add/Edit), Confirm-Dialog, SnackBar.
+
+## Weiteres / Vorschläge
+
+- Bundle-Größe optimieren (selective Material-Imports, lazy loading)
+- Linting (ESLint) durchlaufen lassen und kleinere Warnungen bereinigen
+- Optional: Unit-Tests für Service + Component-Integration hinzufügen
+
+```

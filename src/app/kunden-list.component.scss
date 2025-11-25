@@ -1,72 +1,54 @@
+/* Consolidated styles for KundenListComponent - single copy */
 .kunden-page {
-  padding: 2rem;
   display: flex;
   flex-direction: column;
-  gap: 1.5rem;
+  min-height: 100vh;
+  background: #f6f7f9;
+  color: #111; /* make text dark */
+  font-family: Roboto, "Helvetica Neue", Arial, sans-serif;
 }
 
-.hero-card {
-  background: radial-gradient(circle at top left, #4f46e5, #111827);
-  color: white;
-  overflow: hidden;
+.page-toolbar { color: #fff }
 
-  .hero-content {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: 1rem;
-  }
-
-  h1 {
-    font-size: 2rem;
-    margin-bottom: 0.25rem;
-  }
-
-  p {
-    opacity: .9;
-  }
-
-  .hero-icon {
-    font-size: 3rem;
-    transform: translateY(0);
-    transition: transform 250ms ease;
-  }
-
-  &:hover .hero-icon {
-    transform: translateY(-6px) scale(1.05);
-  }
-}
-
-.table-card {
-  overflow: hidden;
-}
-
-.kunden-table {
-  width: 100%;
-}
-
-.row-hover {
-  transition: background-color 160ms ease, transform 160ms ease, box-shadow 160ms ease;
-
-  &:hover {
-    background-color: rgba(79, 70, 229, 0.04);
-    transform: translateY(-1px);
-    box-shadow: 0 2px 6px rgba(15, 23, 42, 0.2);
-  }
-}
-
-.sub-text {
-  font-size: 0.75rem;
-  color: #6b7280;
-}
-
-.state-card {
+.content {
   display: flex;
-  align-items: center;
-  gap: 1rem;
-  justify-content: center;
+  gap: 20px;
+  padding: 20px;
+  align-items: flex-start;
+}
 
-  &.error {
-    color: #b91c1c;
-  }
+.left-panel {
+  width: 300px;
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  box-sizing: border-box;
+  background: #fff;
+  border-radius: 8px;
+}
+
+.right-panel { flex: 1 1 auto }
+
+.list-card { width: 100%; padding: 0 }
+
+.list-card mat-card-header { padding: 12px 16px }
+.list-card mat-card-content { padding: 12px 16px 20px 16px }
+
+.customers-table { width: 100% }
+
+.actions-cell { display: flex; gap: 8px; justify-content: flex-end }
+
+.add-btn { display: flex; align-items: center; gap: 8px }
+
+.info-card { margin-top: 8px }
+
+.search-field { width: 100% }
+
+.empty { padding: 20px; color: rgba(0,0,0,0.6) }
+.loading { display:flex; align-items:center; justify-content:center; padding:20px 0 }
+
+@media (max-width: 900px) {
+  .content { flex-direction: column }
+  .left-panel { width: 100% }
 }
