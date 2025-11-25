@@ -1,34 +1,37 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
-import { Kunde } from './kunde.model';
+
+export interface Adresse {
+  adresseId?: number;
+  strasse: string;
+  hausnummer: string;
+  plz: string;
+  stadt: string;
+  land: string;
+}
+
+export interface Kunde {
+  kundenId?: number;
+  vorname: string;
+  nachname: string;
+  firma?: string;
+  geburtsdatum?: string; // ISO-String
+  email?: string;
+  telefonnummer?: string;
+  adresse?: Adresse;
+}
 
 @Injectable({
   providedIn: 'root'
 })
 export class KundenService {
-
+  // ⚠️ Hier spricht das Frontend mit deinem Spring-Backend
   private readonly baseUrl = 'http://localhost:8090/api/kunden';
 
-  constructor(private readonly http: HttpClient) {}
+  constructor(private http: HttpClient) {}
 
-  getKunden(): Observable<Kunde[]> {
+  findAll(): Observable<Kunde[]> {
     return this.http.get<Kunde[]>(this.baseUrl);
-  }
-
-  getKunde(id: number): Observable<Kunde> {
-    return this.http.get<Kunde>(`${this.baseUrl}/${id}`);
-  }
-
-  createKunde(kunde: Kunde): Observable<Kunde> {
-    return this.http.post<Kunde>(this.baseUrl, kunde);
-  }
-
-  updateKunde(id: number, kunde: Kunde): Observable<Kunde> {
-    return this.http.put<Kunde>(`${this.baseUrl}/${id}`, kunde);
-  }
-
-  deleteKunde(id: number): Observable<void> {
-    return this.http.delete<void>(`${this.baseUrl}/${id}`);
   }
 }
