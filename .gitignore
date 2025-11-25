@@ -1,0 +1,5 @@
+cd "C:\Users\kevin.trifel\.vscode\frontend"
+
+npm install @angular/material@17.3.12 @angular/cdk@17.3.12 @angular/animations@17.3.12
+node_modules
+node_modules
