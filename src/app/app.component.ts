@@ -1,11 +1,11 @@
 import { Component } from '@angular/core';
-import { RouterOutlet } from '@angular/router';
 import { MatToolbarModule } from '@angular/material/toolbar';
+import { KundenListComponent } from './kunden-list.component';
 
 @Component({
   selector: 'app-root',
   standalone: true,
-  imports: [RouterOutlet, MatToolbarModule],
+  imports: [MatToolbarModule, KundenListComponent],
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.scss']
 })
