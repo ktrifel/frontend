@@ -3,7 +3,7 @@
 // Basis von Angular Material initialisieren
 @include mat.core();
 
-// *** M2-Paletten richtig referenzieren ***
+// M2-Paletten richtig referenzieren
 $primary: mat.m2-define-palette(mat.$m2-indigo-palette);
 $accent: mat.m2-define-palette(mat.$m2-pink-palette);
 $warn: mat.m2-define-palette(mat.$m2-red-palette);
@@ -20,7 +20,7 @@ $theme: mat.m2-define-light-theme((
 // Theme auf alle Angular-Material-Komponenten anwenden
 @include mat.all-component-themes($theme);
 
-// Deine globalen Styles
+// deine globalen Styles
 body {
   margin: 0;
   font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
